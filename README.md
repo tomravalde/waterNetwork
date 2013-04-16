@@ -81,3 +81,5 @@ The quality of the outputted treated water increases linearly with energy input.
 
 - When the con_qual and con_head constraints aren't satisfied, then running the model will result in there being no solution. 
 - Note the negative signs in the con_qual and con_head constraints. This is because process inputs in the k-matrix are defined as negative. Thus we need to make this value positive if we are to compare it to (a positivley defined) required input quantity in an inequality.
+- Not also the units for con_head. Whilst masses are given in [kg], energy inputs are in [MJ], thus the energy input on the RHS of the inequality has been multiplied by 1e6 to put it into J, for comparison with the 'Mgh' calculation on the left-hand side of the inequaility.
+- Currently, the model will give a solution, if the water pumped is pumped to a house with 1m of head. However, this probably isn't realistic. But if required head is raised, then the model won't give a solution.

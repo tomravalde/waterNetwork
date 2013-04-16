@@ -44,5 +44,5 @@ def con_qual(model, j):
 model.con_qual = Constraint(model.qC, rule=con_qual)
 
 def con_head(model, j):
-	return model.Pr[j]*model.k[3,j]*model.NP[j] * 9.81 * 10 <= -model.Pr[j]*model.k[1,j]*model.NP[j] * 1e6
+	return model.Pr[j]*model.k[3,j]*model.NP[j] * 9.81 * 1 <= -model.Pr[j]*model.k[1,j]*model.NP[j] * 1e6
 model.con_head = Constraint(model.qH, rule=con_head)
