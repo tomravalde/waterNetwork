@@ -40,7 +40,7 @@ def con_rule(model, i):
 model.con = Constraint(model.N, rule=con_rule)
 
 def con_qual(model, j):
-	return  -model.Pr[j]*model.k[1,j]*model.NP[j]  >= model.qCmin[j] - model.qCIN[j]
+	return  -0.2*model.Pr[j]*model.k[1,j]*model.NP[j]  >= model.qCmin[j] - model.qCIN[j]
 model.con_qual = Constraint(model.qC, rule=con_qual)
 
 def con_head(model, j):
