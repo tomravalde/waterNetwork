@@ -37,12 +37,13 @@ model.obj = Objective(rule=obj_rule)
 
 def con_rule(model, i):
 	return model.I[i] + sum((model.k[i,p]*model.Pr[p]*model.NP[p]) for p in model.M) == model.D[i] + model.E[i]
+Pr[p] = 
 model.con = Constraint(model.N, rule=con_rule)
 
-def con_qual(model, j):
-	return  -0.2*model.Pr[j]*model.k[1,j]*model.NP[j]  >= model.qCmin[j] - model.qCIN[j]
-model.con_qual = Constraint(model.qC, rule=con_qual)
+#def con_qual(model, j):
+#	return  -0.2*model.Pr[j]*model.k[1,j]*model.NP[j]  >= model.qCmin[j] - model.qCIN[j]
+#model.con_qual = Constraint(model.qC, rule=con_qual)
 
-def con_head(model, j):
-	return model.Pr[j]*model.k[3,j]*model.NP[j] * 9.81 * 1 <= -model.Pr[j]*model.k[1,j]*model.NP[j] * 1e6
-model.con_head = Constraint(model.qH, rule=con_head)
+#def con_head(model, j):
+#	return model.Pr[j]*model.k[3,j]*model.NP[j] * 9.81 * 1 <= -model.Pr[j]*model.k[1,j]*model.NP[j] * 1e6
+#model.con_head = Constraint(model.qH, rule=con_head)
