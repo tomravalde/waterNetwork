@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 *.html
 *.gnumeric
+=======
+*.gnumeric
+*.html
+>>>>>>> P_dv
 *.pyc
 *.json
 *.pdf
