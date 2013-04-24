@@ -1,8 +1,23 @@
 README for Tat water resource network
 =====================================
-Tue Apr 16 14:27:23 BST 2013
 
-# General information
+Wed Apr 24 19:11:37 BST 2013
+
+## General information
+
+- The model is defined as an AbstractModel(), which means the model is defined in the optim_quality.py and it calls values from the data_quality.dat file.
+- The parameters and variables are named such that it should be self-explanatory what they represent.
+
+## Sets
+Parameters and variables are defined over the following sets:
+- R indexes resources
+- P indexes processes
+- contam_P indexes processes which change the levels of contaminants in the water
+- contam_R indexes resources going into a process which change levels of contamination
+- head_P indexes processes which changes the head of the water
+- head_R_out indexes the water resources whose head is change following various processes
+- head_R_in indexes resources used in changing the head of water for a process
+
 ## Resources
 1. Electricity
 2. Source water
@@ -29,41 +44,9 @@ Tue Apr 16 14:27:23 BST 2013
 ## Running the model
 At the command prompt:
 
-    pyomo optim_quality.py data_quality.dat
+    pyomo optim_quality.py data_quality.dat --solver=glpk
 
-# Model definition
-The model is defined as an AbstractModel(), which means it calls in values from the data_quality.dat file.
-
-
-# Sets
-Used to index parameters, constraints and (decision) variables. Sets are defined as follows:
-
-- N resources
-- M processes
-- qC processes which change the contamination
-- qH processes which change the head
-
-# Parameters
-- I_l and I_u define the allowable upper and lower bounds of imported resources
-- D defines the demand of a particular resource (e.g. water for human consumption)
-- a defines the cost of importing any resource
-- k defines the coefficient of production/consumption of any resource in any process. The k matrix is imported into the .dat file from a .csv file.
-- NP_l and NP_u define the allowable upper and lower bounds for the 'number of processes' for any particular process. This may refer to the amount of land set aside for such purposes, or the number of houses using a particular process.
-- Pr defines the rate of any process [kg/capata/year] or [MJ/capita/year].
-- qCmin defines the mimimum allowed quality after treatment process
-- qCIN defines the quality of source water going into a treatment process.
-
-# (Decision) Variables
-These are defined by 'rules' which set the upper and lower boundaries (as defined by parameters).
-
-- I is the amount of resource to import.
-- E is the amount of resource to export.
-- NP is the number of each processes to run.
-
-# Objective function
-This is simply the cost of the imported resources. This is to be minimised.
-
-# Constraints
+## Constraints
 - con_rule is a mass balance constraint for input and output resources at each process. It ensures that 
 
         INPUT + PRODUCTION = DEMAND + EXPORT. 
