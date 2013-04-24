@@ -1,76 +1,99 @@
-set N := 1 2 3 4 5 6 7 8 9 10 11 12 ;
+set R := 
+elec
+water_source
+water_pumped
+water_treated
+water_boiled
+water_domestic
+water_livestock
+water_human
+heat
+water_waste
+water_elevated
+water_hydroGen ;
 
-set M := 1 2 3 4 5 6 7 ;
+set P := 
+hydroElec
+waterTreatment
+pump
+boil
+domestic
+transfer
+elevation ;
 
-set qC := 2 ;
+set contam_P := waterTreatment ;
+set contam_R := elec ;
 
-set qH := 3 ;
+set head_P := pump ;
+set head_R_out := water_pumped ;
+set head_R_in := elec ;
 
-param: I_l I_u :=
-1 0 4
-2 1200000 1600000
-3 0 0
-4 0 0
-5 0 0
-6 0 0
-7 0 0
-8 0 0 
-9 2500 3500
-10 0 0
-11 0 0 
-12 0 0 ;
 
-param D :=
-1 0
-2 0
-3 0
-4 0
-5 0 
-6 150000
-7 450000
-8 600000
-9 0
-10 0
-11 0
-12 0 ;
+param: imports_min imports_max :=
+elec 0 4
+water_source 1200000 1600000
+water_pumped 0 0
+water_treated 0 0
+water_boiled 0 0
+water_domestic 0 0
+water_livestock 0 0
+water_human 0 0 
+heat 2500 3500
+water_waste 0 0
+water_elevated 0 0 
+water_hydroGen 0 0 ;
 
-param a :=
-1 1.94
-2 0.01
-3 0
-4 0
-5 0
-6 0 
-7 0
-8 0
-9 1.94
-10 0
-11 0 
-12 0 ;
+param demand :=
+elec 0
+water_source 0
+water_pumped 0
+water_treated 0
+water_boiled 0 
+water_domestic 150000
+water_livestock 450000
+water_human 600000
+heat 0
+water_waste 0
+water_elevated 0
+water_hydroGen 0 ;
 
-import kTab.csv format=array: k ;
+param cost_resource :=
+elec 1.94
+water_source 0.01
+water_pumped 0
+water_treated 0
+water_boiled 0
+water_domestic 0 
+water_livestock 0
+water_human 0
+heat  1.94
+water_waste 0
+water_elevated 0 
+water_hydroGen 0 ;
 
-param: NP_l NP_u :=
-1 0.5 1.5
-2 15 25
-3 105 106
-4 105 106
-5 105 106 
-6 1 2
-7  1 2 ;
+import kTab.csv format=array: prod_coeff ;
 
-param Pr :=
-1 2
-2 40000
-3 1904.76
-4 761.9
-5 1428.6
-6 450000
-7 150000 ;
+param: process_number_min process_number_max :=
+hydroElec 0.5 105
+waterTreatment 15 25
+pump 105 106
+boil 105 106
+domestic 105 106
+transfer 1 2
+elevation 1 2 ;
 
-param qCmin :=
-2 0.9 ;
+param process_rate :=
+hydroElec  2
+waterTreatment  40000
+pump  1904.76
+boil  761.9
+domestic  1428.6
+transfer  450000
+elevation  150000 ;
 
-param qCIN :=
-2 0.5 ; 
+param contam_min :=
+waterTreatment 0.9 ;
+
+param contam_in :=
+waterTreatment  0.5 ; 
 

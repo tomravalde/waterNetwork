@@ -2,48 +2,57 @@ from coopr.pyomo import *
 
 model = AbstractModel()
 
-model.N = Set()
-model.M = Set()
-model.qC = Set()
-model.qH = Set()
+# Sets
+model.R = Set()
+model.P = Set()
+model.contam_P = Set()
+model.contam_R = Set()
+model.head_P = Set()
+model.head_R_in = Set()
+model.head_R_out = Set()
 
-model.I_l = Param(model.N)
-model.I_u = Param(model.N)
+# Parameters
+model.imports_min = Param(model.R)
+model.imports_max = Param(model.R)
 
-model.D = Param(model.N)
-model.a = Param(model.N)
+model.demand = Param(model.R)
+model.cost_resource = Param(model.R)
 
-model.k = Param(model.N, model.M)
+model.prod_coeff = Param(model.R, model.P)
 
-model.NP_l = Param(model.M)
-model.NP_u = Param(model.M)
-model.Pr = Param(model.M)
+model.process_number_min = Param(model.P)
+model.process_number_max = Param(model.P)
+model.process_rate = Param(model.P)
 
-model.qCmin = Param(model.qC)
-model.qCIN = Param(model.qC)
+model.contam_min = Param(model.contam_P)
+model.contam_in = Param(model.contam_P)
 
-def Ibounds(model, i):
-	return (model.I_l[i], model.I_u[i])
-model.I = Var(model.N, bounds=Ibounds)
-model.E = Var(model.N, bounds=(0,None))
+# Variables
+def import_bounds(model, r):
+	return (model.imports_min[r], model.imports_max[r])
 
-def NPBounds(model, p):
-	return (model.NP_l[p], model.NP_u[p])
-model.NP = Var(model.M, bounds=NPBounds)
+def process_number_bounds(model, p):
+	return (model.process_number_min[p], model.process_number_max[p])
 
+model.imports = Var(model.R, bounds=import_bounds)
+model.exports = Var(model.R, bounds=(0,None))
+model.process_number = Var(model.P, bounds=process_number_bounds)
+
+# Objective
 def obj_rule(model):
-	return sum((model.a[i]*model.I[i]) for i in model.N)
+	return sum((model.cost_resource[r]*model.imports[r]) for r in model.R)
 model.obj = Objective(rule=obj_rule)
 
-def con_rule(model, i):
-	return model.I[i] + sum((model.k[i,p]*model.Pr[p]*model.NP[p]) for p in model.M) == model.D[i] + model.E[i]
-Pr[p] = 
-model.con = Constraint(model.N, rule=con_rule)
+# Constraints
+def resource_balance(model, r):
+	return model.imports[r] + sum((model.prod_coeff[r,p]*model.process_rate[p]*model.process_number[p]) for p in model.P) == model.demand[r] + model.exports[r]
 
-#def con_qual(model, j):
-#	return  -0.2*model.Pr[j]*model.k[1,j]*model.NP[j]  >= model.qCmin[j] - model.qCIN[j]
-#model.con_qual = Constraint(model.qC, rule=con_qual)
+def process_contam(model, r, p):
+	return  -0.2*model.process_rate[p]*model.prod_coeff[r,p]*model.process_number[p]  >= model.contam_min[p] - model.contam_in[p]
 
-#def con_head(model, j):
-#	return model.Pr[j]*model.k[3,j]*model.NP[j] * 9.81 * 1 <= -model.Pr[j]*model.k[1,j]*model.NP[j] * 1e6
-#model.con_head = Constraint(model.qH, rule=con_head)
+def process_head(model, r_in, r_out, p):
+	return model.process_rate[p]*model.prod_coeff[r_out,p]*model.process_number[p] * 9.81 * 1 <= -model.process_rate[p]*model.prod_coeff[r_in,p]*model.process_number[p] * 1e6
+
+model.quantity = Constraint(model.R, rule=resource_balance)
+model.contamination = Constraint(model.contam_R, model.contam_P,  rule=process_contam)
+model.con_head = Constraint(model.head_R_in, model.head_R_out, model.head_P, rule=process_head)
