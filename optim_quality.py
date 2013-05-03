@@ -12,20 +12,20 @@ model.head_R_in = Set()
 model.head_R_out = Set()
 
 # Parameters
-model.imports_min = Param(model.R)
-model.imports_max = Param(model.R)
+model.imports_min = Param(model.R, initialize=0)
+model.imports_max = Param(model.R, initialize=0)
 
-model.demand = Param(model.R)
-model.cost_resource = Param(model.R)
+model.demand = Param(model.R, initialize=0)
+model.cost_resource = Param(model.R, initialize=0)
 
-model.prod_coeff = Param(model.R, model.P)
+model.prod_coeff = Param(model.R, model.P, initialize=0)
 
-model.process_number_min = Param(model.P)
-model.process_number_max = Param(model.P)
-model.process_rate = Param(model.P)
+model.process_number_min = Param(model.P, initialize=0)
+model.process_number_max = Param(model.P, initialize=0)
+model.process_rate = Param(model.P, initialize=0)
 
-model.contam_min = Param(model.contam_P)
-model.contam_in = Param(model.contam_P)
+model.contam_min = Param(model.contam_P, initialize=0)
+model.contam_in = Param(model.contam_P, initialize=0)
 
 # Variables
 def import_bounds(model, r):

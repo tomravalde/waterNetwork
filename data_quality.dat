@@ -28,50 +28,48 @@ set head_P := pump ;
 set head_R_out := water_pumped ;
 set head_R_in := elec ;
 
-
 param: imports_min imports_max :=
 elec 0 4
 water_source 1200000 1600000
-water_pumped 0 0
-water_treated 0 0
-water_boiled 0 0
-water_domestic 0 0
-water_livestock 0 0
-water_human 0 0 
-heat 2500 3500
-water_waste 0 0
-water_elevated 0 0 
-water_hydroGen 0 0 ;
+heat 2500 3500 ;
 
 param demand :=
-elec 0
-water_source 0
-water_pumped 0
-water_treated 0
-water_boiled 0 
 water_domestic 150000
 water_livestock 450000
-water_human 600000
-heat 0
-water_waste 0
-water_elevated 0
-water_hydroGen 0 ;
+water_human 600000 ;
 
 param cost_resource :=
 elec 1.94
 water_source 0.01
-water_pumped 0
-water_treated 0
-water_boiled 0
-water_domestic 0 
-water_livestock 0
-water_human 0
-heat  1.94
-water_waste 0
-water_elevated 0 
-water_hydroGen 0 ;
+heat  1.94 ;
 
-import kTab.csv format=array: prod_coeff ;
+#import kTab.csv format=array: prod_coeff ;
+
+param prod_coeff :=
+elec hydroElec 1
+elec waterTreatment -2.5E-06
+elec pump -1E-05
+water_source waterTreatment -1.125
+water_source transfer -1
+water_source elevation -1
+water_pumped pump 1
+water_pumped boil -1
+water_pumped domestic -0.8
+water_treated waterTreatment 1
+water_treated pump -4
+water_boiled boil 1
+water_boiled domestic -0.533333
+water_domestic domestic 1
+water_livestock transfer 1
+water_human boil 7.5
+heat boil -0.0375
+water_waste waterTreatment 0.3125
+water_waste domestic 0.33333
+water_elevated hydroElec -75000 
+water_elevated elevation 1
+water_hydroGen hydroElec 75000
+water_hydroGen waterTreatment -0.1875 ;
+
 
 param: process_number_min process_number_max :=
 hydroElec 0.5 105
